@@ -1,32 +1,20 @@
-FROM python:3.10-slim
+# Utiliser une image Python officielle comme base
+FROM python:3.9-slim
 
-# Installer les outils nécessaires pour compiler PyYAML et autres
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        gcc \
-        build-essential \
-        libffi-dev \
-        libssl-dev \
-        libyaml-dev \
-        && rm -rf /var/lib/apt/lists/*
-
-# Définir le dossier de travail
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier requirements.txt et installer les dépendances
+# Copier le fichier requirements.txt dans l'image
 COPY requirements.txt .
-RUN pip install --upgrade pip
+
+# Installer les dépendances
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copier le reste des fichiers du projet
+# Copier tout le reste du code
 COPY . .
 
-# Exposer le port de FastAPI
+# Exposer le port (si ton app écoute sur un port, par exemple 8000)
 EXPOSE 8000
 
-# Commande pour démarrer l'application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
-
-
-
+# Commande pour démarrer ton application (ajuste selon ton projet)
+CMD ["python", "app.py"]
